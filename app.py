@@ -1,5 +1,8 @@
 import streamlit as st
 from transformers import AutoModelForSequenceClassification, AutoTokenizer, pipeline
+import pandas as pd
+import matplotlib.pyplot as plt
+import base64
 
 def test_model(source, identifier_or_directory, texts):
     try:
@@ -19,8 +22,16 @@ def test_model(source, identifier_or_directory, texts):
         st.error(f"An error occurred: {e}")
         return []
 
+# Function to generate download link for the results
+def get_table_download_link(df):
+    csv = df.to_csv(index=False)
+    b64 = base64.b64encode(csv.encode()).decode()
+    href = f'<a href="data:file/csv;base64,{b64}" download="sentiment_analysis_results.csv">Download CSV file</a>'
+    return href
+
 # Streamlit app
 st.set_page_config(page_title="Multilingual Sentiment Analysis", layout="wide")
+st.image("logo.png", width=150)
 st.title("Multilingual Sentiment Analysis for Businesses")
 st.write("""
 Welcome to our Multilingual Sentiment Analysis tool. This application leverages state-of-the-art NLP models to analyze the sentiment of texts in various languages. Ideal for businesses looking to gain insights into customer feedback, social media comments, and more.
@@ -41,6 +52,7 @@ st.write("""
 2. If using a Hugging Face model, enter the model identifier. If using a local model, enter the directory path.
 3. Enter the texts you wish to analyze, with each text on a new line.
 4. Click 'Analyze Sentiment' to get the sentiment analysis results.
+5. Download the results as a CSV file if needed.
 """)
 
 # Example business use cases
@@ -72,7 +84,22 @@ if st.button("Analyze Sentiment"):
                 'Sentiment': result['label'],
                 'Confidence': f"{result['score']:.2f}"
             })
-        st.table(result_data)
+        
+        df_results = pd.DataFrame(result_data)
+        st.table(df_results)
+        
+        # Download link
+        st.markdown(get_table_download_link(df_results), unsafe_allow_html=True)
+        
+        # Sentiment distribution
+        st.write("### Sentiment Distribution")
+        sentiment_counts = df_results['Sentiment'].value_counts()
+        fig, ax = plt.subplots()
+        sentiment_counts.plot(kind='bar', ax=ax)
+        ax.set_title('Sentiment Distribution')
+        ax.set_xlabel('Sentiment')
+        ax.set_ylabel('Count')
+        st.pyplot(fig)
 
 # Business Applications
 st.write("## Business Applications")
@@ -82,6 +109,12 @@ Our Multilingual Sentiment Analysis tool can be leveraged in various business co
 - **Social Media Monitoring:** Track brand sentiment on social media platforms to gauge public perception and address issues proactively.
 - **Market Research:** Analyze consumer sentiment towards competitors' products and industry trends.
 - **Employee Feedback:** Assess sentiment in employee surveys and feedback to enhance workplace satisfaction and productivity.
+""")
+
+# Contact Information
+st.write("## Contact Us")
+st.write("""
+If you have any questions or need support, please contact us at support@business.com.
 """)
 
 # Footer
