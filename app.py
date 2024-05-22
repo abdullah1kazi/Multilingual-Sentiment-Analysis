@@ -114,7 +114,7 @@ Our Multilingual Sentiment Analysis tool can be leveraged in various business co
 # Contact Information
 st.write("## Contact Us")
 st.write("""
-If you have any questions or need support, please contact us at support@business.com.
+If you have any questions or need support, please contact us at akazi@ucdavis.edu.
 """)
 
 # Footer
