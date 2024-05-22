@@ -1,20 +1,23 @@
 import streamlit as st
 from transformers import AutoModelForSequenceClassification, AutoTokenizer, pipeline
 
-# Define the test_model function
 def test_model(source, identifier_or_directory, texts):
-    if source == 'huggingface':
-        tokenizer = AutoTokenizer.from_pretrained(identifier_or_directory)
-        model = AutoModelForSequenceClassification.from_pretrained(identifier_or_directory)
-    elif source == 'local':
-        tokenizer = AutoTokenizer.from_pretrained(identifier_or_directory)
-        model = AutoModelForSequenceClassification.from_pretrained(identifier_or_directory)
-    else:
-        raise ValueError("Source must be 'huggingface' or 'local'")
-    
-    classifier = pipeline("text-classification", model=model, tokenizer=tokenizer)
-    predictions = classifier(texts)
-    return predictions
+    try:
+        if source == 'huggingface':
+            tokenizer = AutoTokenizer.from_pretrained(identifier_or_directory)
+            model = AutoModelForSequenceClassification.from_pretrained(identifier_or_directory)
+        elif source == 'local':
+            tokenizer = AutoTokenizer.from_pretrained(identifier_or_directory)
+            model = AutoModelForSequenceClassification.from_pretrained(identifier_or_directory)
+        else:
+            raise ValueError("Source must be 'huggingface' or 'local'")
+        
+        classifier = pipeline("text-classification", model=model, tokenizer=tokenizer)
+        predictions = classifier(texts)
+        return predictions
+    except Exception as e:
+        st.error(f"An error occurred: {e}")
+        return []
 
 # Streamlit app
 st.set_page_config(page_title="Multilingual Sentiment Analysis", layout="wide")
@@ -61,15 +64,15 @@ if st.button("Analyze Sentiment"):
         results = test_model(source, model_id, text_list)
     
     st.write("## Results")
-    result_data = []
-    for i, result in enumerate(results):
-        result_data.append({
-            'Text': text_list[i],
-            'Sentiment': result['label'],
-            'Confidence': f"{result['score']:.2f}"
-        })
-    
-    st.table(result_data)
+    if results:
+        result_data = []
+        for i, result in enumerate(results):
+            result_data.append({
+                'Text': text_list[i],
+                'Sentiment': result['label'],
+                'Confidence': f"{result['score']:.2f}"
+            })
+        st.table(result_data)
 
 # Business Applications
 st.write("## Business Applications")
@@ -84,7 +87,7 @@ Our Multilingual Sentiment Analysis tool can be leveraged in various business co
 # Footer
 st.write("""
 ---
-This app uses BERT-based models for multilingual sentiment analysis.
+Created by [Your Name]. This app uses BERT-based models for multilingual sentiment analysis. For more information, visit our [website](#).
 """)
 
 # Add CSS for better styling
@@ -105,3 +108,4 @@ st.markdown("""
     }
 </style>
 """, unsafe_allow_html=True)
+
