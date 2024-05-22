@@ -76,7 +76,7 @@ You can also access the deployed Streamlit app here: [Streamlit App](https://bax
 
 ## License
 
-This model is licensed under the MIT License.
+This model is licensed under the [MIT License](LICENSE).
 
 ## Credits
 
