@@ -53,7 +53,45 @@ st.write("""
 3. Enter the texts you wish to analyze, with each text on a new line.
 4. Click 'Analyze Sentiment' to get the sentiment analysis results.
 5. Download the results as a CSV file if needed.
+6. Alternatively, upload your own CSV file for analysis.
 """)
+
+# File upload for user CSV
+uploaded_file = st.file_uploader("Upload your CSV file", type=["csv"])
+if uploaded_file is not None:
+    df = pd.read_csv(uploaded_file)
+    st.write("Uploaded CSV:")
+    st.write(df)
+
+    # Select column containing text
+    text_column = st.selectbox("Select the column containing text data", df.columns)
+
+    # Checkbox to analyze the uploaded data
+    if st.checkbox("Analyze Uploaded CSV"):
+        with st.spinner("Analyzing..."):
+            texts = df[text_column].tolist()
+            results = test_model(source, model_id, texts)
+            if results:
+                sentiments = [result['label'] for result in results]
+                confidences = [result['score'] for result in results]
+                df['Sentiment'] = sentiments
+                df['Confidence'] = confidences
+
+                st.write("## Results")
+                st.write(df)
+
+                # Download link for the updated CSV
+                st.markdown(get_table_download_link(df), unsafe_allow_html=True)
+
+                # Sentiment distribution
+                st.write("### Sentiment Distribution")
+                sentiment_counts = df['Sentiment'].value_counts()
+                fig, ax = plt.subplots()
+                sentiment_counts.plot(kind='bar', ax=ax)
+                ax.set_title('Sentiment Distribution')
+                ax.set_xlabel('Sentiment')
+                ax.set_ylabel('Count')
+                st.pyplot(fig)
 
 # Example business use cases
 st.write("## Example Business Use Cases")
@@ -141,4 +179,5 @@ st.markdown("""
     }
 </style>
 """, unsafe_allow_html=True)
+
 
