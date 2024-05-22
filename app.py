@@ -87,7 +87,7 @@ Our Multilingual Sentiment Analysis tool can be leveraged in various business co
 # Footer
 st.write("""
 ---
-Created by [Your Name]. This app uses BERT-based models for multilingual sentiment analysis. For more information, visit our [website](#).
+This app uses BERT-based models for multilingual sentiment analysis.
 """)
 
 # Add CSS for better styling
