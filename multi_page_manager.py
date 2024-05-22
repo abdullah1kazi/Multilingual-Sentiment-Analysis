@@ -1,3 +1,6 @@
+import streamlit as st
+
+
 class MultiPage:
     def __init__(self):
         self.pages = []
