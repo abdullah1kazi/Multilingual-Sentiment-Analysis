@@ -159,7 +159,7 @@ if page == "Home":
     # Contact Information
     st.write("## Contact Us")
     st.write("""
-    If you have any questions or need support, please contact us at akazi@ucdavis.edu.
+    If you have any questions or need support, please contact us at one of the following emails: akazi@ucdavis.edu, mmaanvee@gmail.com, goyalavantika@gmail.com, chandra.shivank@gmail.com.
     """)
 
     # Footer
