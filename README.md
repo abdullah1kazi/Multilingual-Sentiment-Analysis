@@ -80,4 +80,4 @@ This model is licensed under the [MIT License](LICENSE).
 
 ## Credits
 
-This model and web application were developed by Abdullah Kazi, Maanvee Mehrotra, Avantika Goyal, Shivank Chandra, and Anurag Vedagiri(anurag.vedagiri@gmail.com) using the Hugging Face Transformers library and the BERT base multilingual model.
+This model and web application were developed by Abdullah Kazi, Maanvee Mehrotra, Avantika Goyal (goyalavantika@gmail.com), Shivank Chandra, and Anurag Vedagiri(anurag.vedagiri@gmail.com) using the Hugging Face Transformers library and the BERT base multilingual model.
